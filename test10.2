@@ -1,0 +1,22 @@
+<?php
+session_start();
+$text = $_POST['text'];
+$pdo = new PDO("mysql:host=localhost; dbname=myretov_test", "root", "root");
+$sql = "SELECT * FROM my_new_table WHERE text=:text";
+$statement = $pdo ->prepare($sql);
+$statement ->execute(['text'=> $text]);
+$task = $statement ->fetch(PDO::FETCH_ASSOC);
+
+if (!empty($task)) {
+    $message = "Такая запись уже существует!";
+    $_SESSION['danger'] = $message;
+    header("Location: /test.php");
+    exit;
+}
+
+$sql = "INSERT INTO my_new_table (text) VALUE (:text)";
+$statement = $pdo ->prepare($sql);
+$statement ->execute(['text'=> $text]);
+
+header("Location: /test.php");
+?>
