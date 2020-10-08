@@ -1,0 +1,9 @@
+<?php
+$text = $_POST['text'];
+$pdo = new PDO("mysql:host=localhost; dbname=myretov_test", "root", "root");
+$sql = "INSERT INTO my_new_table (text) VALUE (:text)";
+$statement = $pdo ->prepare($sql);
+$statement ->execute(['text'=> $text]);
+
+header("Location: /test.php");
+?>
